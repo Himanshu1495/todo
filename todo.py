@@ -20,6 +20,14 @@ def file_write(id,task,date,time):
 	fileOpen.close()
 	return	
 
+#function to print tasks
+def display(tasks):
+	print colored("Task ID    |     Task    |       Date       |    Time",'yellow')
+	print colored("-------------------------------------------------------",'yellow')			
+	for task in tasks:
+		print colored("    " + task[0] + "      |    " + task[1] + "    |    " + task[2] + "    |    " + task[3],'cyan')
+	return
+
 #function to check todays tasks
 def tasks_today():
 	data = file_read()
@@ -28,10 +36,7 @@ def tasks_today():
 	if len(tasks_today) > 0: 
 		#if tasks are present, display them
 		print colored("Today's tasks : ",'green')
-		print colored("Task ID    |     Task    |       Date       	|       Time",'yellow')
-		print colored("-------------------------------------------------------",'yellow')			
-		for task in tasks_today:
-			print colored("    " + task[0] + "      |    " + task[1] + "    |    " + task[2] + "    |    " + task[3],'cyan')
+		display(tasks_today)
 		return
 	else:
 		#if no tasks are present 
@@ -61,6 +66,13 @@ def tasks_add():
 	response = colored("'%s' has been created at %s %s having ID %s!"  %(add,date,time,id),'green')
 	return response
 
+
+#function to show all the tasks
+def show_tasks():
+	data = file_read() #TODO : pass parameter to filter according to date
+	display(data)
+	return 
+
 #function to close the application
 def close_todo():
 	print colored("Bye Bye!",'cyan')
@@ -70,12 +82,16 @@ def close_todo():
 def controller_function():
 	print ""
 	print colored("What TODO? ",'yellow'),
-	task = raw_input() #ask for input
+	task = raw_input().lower() #ask for input
 	if task == "add": #if add
 		print tasks_add()
 		controller_function() #recursion
-	elif task == "exit":
+	elif task == "exit": 
 		print close_todo()		
+	elif task == "show tasks":
+		show_tasks() 
+		print colored("Tasks : ",'green')
+		controller_function()			
 	else:
 		print colored("TODO doesn't understand that! Please read instructions!",'red') #invalid input
  		controller_function()
